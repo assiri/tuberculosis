@@ -1,0 +1,14 @@
+{
+  "name": "train",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "train": "node main.js"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs-node-gpu": "^2.6.0"
+  },
+  "devDependencies": {
+    "clang-format": "^1.2.4"
+  }
+}
