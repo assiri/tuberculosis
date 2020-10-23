@@ -1,0 +1,5 @@
+17464ms 31075us/step - acc=0.827 loss=0.422 val_acc=0.740 val_loss=0.460 
+Epoch 32: early stopping.
+
+Evaluation result:
+  Loss = 0.412; Accuracy = 0.854

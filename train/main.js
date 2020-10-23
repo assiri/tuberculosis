@@ -18,7 +18,7 @@ async function run(epochs, batchSize, modelSavePath) {
     epochs,
     batchSize,
     validationSplit,
-    //callbacks: [tf.callbacks.earlyStopping({monitor: 'val_acc'}), new tf.CustomCallback({onEpochEnd: onTrainBegin()}),]
+    callbacks: [tf.callbacks.earlyStopping({monitor:'val_loss', mode:'min', verbose:1, patience:25})]
   });
 
   const {images: testImages, labels: testLabels} = data.getTestData();
@@ -35,4 +35,4 @@ async function run(epochs, batchSize, modelSavePath) {
   }
 }
 
-run(25, 32, '../web/static/model');
+run(600, 32, '../web/static/model');

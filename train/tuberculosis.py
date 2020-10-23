@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import tensorflowjs as tfjs
 
 from functools import partial
 import tensorflow as tf
@@ -30,16 +31,11 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator, array_to_im
 from imutils import paths
 import cv2
 
-
-
-
 INIT_LR = 1e-3
-EPOCHS = 25
+EPOCHS = 600
 BS = 8
 
-
 num_classes = 2
-
 
 # input image dimensions
 img_rows, img_cols = 96,96
@@ -103,24 +99,28 @@ model.compile(loss="binary_crossentropy",optimizer=opt,metrics=['accuracy'])
 
 
 #   Define early stopping callback
-my_callbacks = [EarlyStopping(monitor='val_accuracy', patience=5, mode='max')]
-
+early_stop = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=25)
 
 hist = model.fit(x_train, y_train, batch_size=BS,steps_per_epoch=len(x_train) // BS,epochs=EPOCHS,
-          #verbose=1,callbacks=my_callbacks,validation_data=(x_test, y_test),validation_steps=len(x_test) // BS,
+          verbose=1 ,validation_data=(x_test, y_test),validation_steps=len(x_test) // BS,
+          callbacks=[early_stop]
           )
 
 #print(hist.history.keys())
 
 
-losses = pd.DataFrame(hist.history)
-losses.plot()
+model_loss = pd.DataFrame(hist.history)
+model_loss[['accuracy','val_accuracy']].plot()
+plt.show()
+
+model_loss[['loss','val_loss']].plot()
 plt.show()
 
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
+"""
 keras_path = os.path.join(".", "keras")
 os.makedirs(keras_path, exist_ok=True)
 
@@ -128,4 +128,8 @@ with open(os.path.join(keras_path, "model.json"), 'w') as f:
     f.write(model.to_json())
 model.save_weights(os.path.join(keras_path, 'model.h5'))
 model.save(os.path.join(keras_path, 'full_model.h5'))
+"""
+tfjs.converters.save_keras_model(model, "../web/static/model")
+
+
 

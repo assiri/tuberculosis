@@ -25,7 +25,7 @@ $("#predict-button").click(async function () {
 	
 	// Pre-process the image
 	let tensor = tf.browser.fromPixels(image)
-		.resizeNearestNeighbor([96,96]) // change the image size here
+		.resizeNearestNeighbor([224,224]) // change the image size here
 		.toFloat()
 		.div(tf.scalar(255.0))
 		.expandDims();
