@@ -13,7 +13,7 @@ async function run(epochs, batchSize, modelSavePath) {
   model.summary();
 
   const validationSplit = 0.15;
-  const  onTrainBegin = logs => {console.log("onTrainBegin");}
+
   await model.fit(trainImages, trainLabels, {
     epochs,
     batchSize,

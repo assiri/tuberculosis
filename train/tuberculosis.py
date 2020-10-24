@@ -32,13 +32,13 @@ from imutils import paths
 import cv2
 
 INIT_LR = 1e-3
-EPOCHS = 600
+EPOCHS = 25
 BS = 8
 
 num_classes = 2
 
 # input image dimensions
-img_rows, img_cols = 96,96
+img_rows, img_cols = 224,224
 
 print("[INFO] loading images...")
 imagePaths = list(paths.list_images("./data"))
@@ -48,12 +48,12 @@ labels = []
 # loop over the image paths
 for imagePath in imagePaths:
     hasTuberculosis = imagePath.lower().endswith("_1.png")
-    img = load_img(imagePath ,target_size=(96,96))
+    img = load_img(imagePath ,target_size=(224,224))
     x = img_to_array(img)  
     """
     image = cv2.imread(imagePath)
     image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-    image = cv2.resize(image, (96, 96))
+    image = cv2.resize(image, (224, 224))
     """
     data.append(x)
     label = 1 if hasTuberculosis else 0

@@ -24,12 +24,11 @@ $("#predict-button").click(async function () {
 	let image = $('#selected-image').get(0);
 	
 	// Pre-process the image
-	let tensor = tf.browser.fromPixels(image)
-		.resizeNearestNeighbor([96,96]) // change the image size here
-		.toFloat()
-		.div(tf.scalar(255.0))
-		.expandDims();
-		//tensor= tf.reshape(tensor, [-1,96,96,1])
+	let tensor = tf.browser.fromPixels(image).resizeNearestNeighbor([224, 224]).toFloat(); 
+		let offset = tf.scalar(127.5);
+         tensor.sub(offset).div(offset).expandDims();
+		
+		tensor= tf.reshape(tensor, [-1,224,224,3])
 	let predictions = await model.predict(tensor).data();
 	console.log(predictions)
 	let top5 = Array.from(predictions)

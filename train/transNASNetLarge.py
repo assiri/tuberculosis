@@ -40,7 +40,7 @@ for imagePath in imagePaths:
 	hasTuberculosis = imagePath.lower().endswith("_1.png")
 	image = cv2.imread(imagePath)
 	image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-	image = cv2.resize(image, (96, 96))
+	image = cv2.resize(image, (224, 224))
 
 	data.append(image)
 	label = 1 if hasTuberculosis else 0
@@ -60,7 +60,7 @@ labels = to_categorical(labels)
 # initialize the training data augmentation object
 trainAug = ImageDataGenerator(rotation_range=15,fill_mode="nearest")
 
-baseModel = NASNetLarge(weights="imagenet", include_top=False,input_tensor=Input(shape=(96, 96, 3)))
+baseModel = NASNetLarge(weights="imagenet", include_top=False,input_tensor=Input(shape=(224, 224, 3)))
 
 headModel = baseModel.output
 headModel = AveragePooling2D(pool_size=(3, 3))(headModel)

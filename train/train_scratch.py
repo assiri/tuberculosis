@@ -50,7 +50,7 @@ for imagePath in imagePaths:
 		image = cv2.imread(imagePath)
 		if image is not None:
 			image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-			image = cv2.resize(image, (96, 96))
+			image = cv2.resize(image, (224, 224))
 			data.append(image)
 			label = 1 if hasTuberculosis else 0
 			labels.append(label)
@@ -88,7 +88,7 @@ my_callbacks = [
 def build_model(learning_rate=0.001):
     # define model architecture
     model = tf.keras.Sequential([
-      tf.keras.layers.Conv2D(filters=32, kernel_size=(3,3), activation='relu', input_shape=(96, 96, 3), name='x'),
+      tf.keras.layers.Conv2D(filters=32, kernel_size=(3,3), activation='relu', input_shape=(224, 224, 3), name='x'),
       tf.keras.layers.MaxPooling2D(),
       tf.keras.layers.Flatten(),
       tf.keras.layers.Dense(64, activation='relu'),

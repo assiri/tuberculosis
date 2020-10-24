@@ -40,7 +40,7 @@ for imagePath in imagePaths:
 	hasTuberculosis = imagePath.lower().endswith("_1.png")
 	image = cv2.imread(imagePath)
 	image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-	image = cv2.resize(image, (96, 96))
+	image = cv2.resize(image, (224, 224))
 
 	data.append(image)
 	label = 1 if hasTuberculosis else 0
@@ -60,7 +60,8 @@ labels = to_categorical(labels)
 # initialize the training data augmentation object
 trainAug = ImageDataGenerator(rotation_range=15,fill_mode="nearest")
 
-baseModel = DenseNet121(weights="imagenet", include_top=False,input_tensor=Input(shape=(96, 96, 3)))
+baseModel = DenseNet121(include_top=False, input_shape=(224, 224, 3))
+
 
 headModel = baseModel.output
 headModel = AveragePooling2D(pool_size=(3, 3))(headModel)
@@ -93,7 +94,7 @@ callbacks = [earlystop, learning_rate_reduction]
 
 H=model.fit(trainAug.flow(trainX, trainY, batch_size=BS),steps_per_epoch = trainX.shape[0] // BS,epochs=EPOCHS, verbose=1 ,validation_data=trainAug.flow(testX, testY, batch_size=BS),validation_steps=len(testX) // BS,callbacks=callbacks)
 
-model.save("mm.h5") # tensorflowjs_converter --input_format keras --output_format=tfjs_graph_model mm.h5 ../web/model/
+model.save("mm.h5") # tensorflowjs_converter --input_format keras --output_format=tfjs_graph_model mm.h5 ../web/static/model/
 #tfjs.converters.save_keras_model(model,{output_format:"tfjs_graph_model" }, "covidClient/model")
 
 predIdxs = model.predict(testX, batch_size=BS)
